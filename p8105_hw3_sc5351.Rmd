@@ -126,3 +126,22 @@ state_2010
 ```
 In 2002, CT, FL, MA, NC, NJ, and PA (totally 6) were observed at 7 or more locations.
 In 2010, FL, MA, MD, NC, NE, NJ, NY, OH, PA, SC, TX and WA (totally 14) were observed at 7 or more locations.
+
+Then construct a dataset that is limited to Excellent responses, and contains, year, state, and a variable that averages the data_value across locations within a state. 
+```{r}
+spaghetti_data <- brfss_data |> 
+  filter(response == "Excellent") |>
+  group_by(year, state) |>
+  summarise(average_value = mean(data_value, na.rm = TRUE), .groups = "drop")
+spaghetti_data|>
+  ggplot(aes(x = year, y = average_value, group = state)) + 
+  geom_line(aes(color = state), alpha = .5) + 
+  labs(
+    title = "Average Value of Excellent Responses",
+    x = "Year",
+    y = "Average Value",
+    caption = "Data from brfss_data"
+  ) +
+  theme(legend.position = "right")
+```
+
