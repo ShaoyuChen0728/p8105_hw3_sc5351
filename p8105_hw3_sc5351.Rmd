@@ -185,9 +185,11 @@ covar_data
 ```{r}
 accel_data <-
   read_csv("./data/nhanes_accel.csv")|>
-  janitor::clean_names()
+  janitor::clean_names() |>
+  drop_na() 
 accel_data
 ```
+
 Produce a reader-friendly table for the number of men and women in each education category
 ```{r}
 covar_table <- covar_data |>
@@ -214,3 +216,21 @@ age_data <- covar_data |>
 age_data
 ```
 According to this boxplot, we can find the younger participants trend to have high education level.
+
+Create a total activity plot
+```{r}
+merged_data <-
+  merge(covar_data, accel_data, by = "seqn") |>
+  mutate(total_act = rowSums(across(min1:min1440), na.rm = TRUE)) |>
+  ggplot(aes(x = age, y = total_act, color = sex)) +
+  geom_point(alpha = 0.5) +
+  geom_smooth(se = FALSE) +
+  labs(
+    title = "Men and Female with Different Education Levels in Age and Total Activity",
+    x = "Age",
+    y = "Total Activity"
+  ) +
+  facet_wrap(~education) 
+merged_data
+```
+Based on this plot, we can see that female with high school and more than high school education level have more total activities than that of male. However, male with less than high school education level have more total activities than that of female.
