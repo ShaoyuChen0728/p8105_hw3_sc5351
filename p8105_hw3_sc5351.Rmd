@@ -172,8 +172,8 @@ covar_data =
   drop_na()|>
   mutate(
     sex = case_when(
-    sex == 1 ~ "Male",
-    sex == 2 ~ "Female"
+    sex == 1 ~ "male",
+    sex == 2 ~ "female"
   ),
   education = case_when(
     education == 1 ~ "Less than high school",
@@ -188,6 +188,29 @@ accel_data <-
   janitor::clean_names()
 accel_data
 ```
-Produce a reader-friendly table for the number of men and women in each education category, and create a visualization of the age distributions for men and women in each education category.
+Produce a reader-friendly table for the number of men and women in each education category
+```{r}
+covar_table <- covar_data |>
+  group_by(sex, education) |>
+  summarise(count = n()) |>
+  pivot_wider( names_from = "sex", values_from = "count")|>
+  knitr::kable(digits = 2)
+covar_table
+```
+There are totally 228 participants in this study, which have 110 female and 118 male. Based on this table, we can see that male in high school education level are more than female. However, The number of women with education levels higher than high school and lower than high school is greater than that of men.
 
-
+Then, create a visualization of the age distributions for men and women in each education category.
+```{r}
+age_data <- covar_data |>
+  select(sex,education,age) |>
+  ggplot(aes(x = education, y = age)) + 
+  geom_boxplot(aes(fill = sex, alpha = 0.3)) +
+  labs(
+    x = "Education Level",
+    y = "Age",
+    title = "the Age Distributions for Men and Women in Each Education"
+    ) +
+  theme(legend.position = "right")
+age_data
+```
+According to this boxplot, we can find the younger participants trend to have high education level.
