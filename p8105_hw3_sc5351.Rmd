@@ -162,3 +162,32 @@ plot_data |>
   theme(legend.position = "right")
 ```
 
+##Problem 3
+Load, tidy, merge, and otherwise organize the data sets.
+```{r}
+covar_data =
+  read_csv("./data/nhanes_covar.csv", skip = 4) |>
+  janitor::clean_names() |>
+  filter(age >= 21) |>
+  drop_na()|>
+  mutate(
+    sex = case_when(
+    sex == 1 ~ "Male",
+    sex == 2 ~ "Female"
+  ),
+  education = case_when(
+    education == 1 ~ "Less than high school",
+    education == 2 ~ "High school equivalent",
+    education == 3 ~ "More than high school"
+  )) 
+covar_data
+```
+```{r}
+accel_data <-
+  read_csv("./data/nhanes_accel.csv")|>
+  janitor::clean_names()
+accel_data
+```
+Produce a reader-friendly table for the number of men and women in each education category, and create a visualization of the age distributions for men and women in each education category.
+
+
