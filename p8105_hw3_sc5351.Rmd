@@ -145,3 +145,19 @@ spaghetti_data|>
   theme(legend.position = "right")
 ```
 
+Finally, make a two-panel plot showing, for the years 2006, and 2010, distribution of data_value for responses (“Poor” to “Excellent”) among locations in NY State.
+```{r}
+plot_data <- brfss_data |>
+  filter(state == "NY" & year %in% c(2006, 2010) & response %in% c("Poor", "Fair", "Good", "Very Good", "Excellent"))
+plot_data |>
+  ggplot(aes(x = response,y = data_value, color=response))+
+  geom_boxplot()+
+  labs(
+    x = "Response",
+    y = "Data Value",
+    title = "Distribution of data_value for Responses in NY State in 2006 and 2010"
+  ) +
+  facet_grid(.~year) +
+  theme(legend.position = "right")
+```
+
