@@ -1,0 +1,20 @@
+---
+title: "p8105_hw3_sc5351"
+author: "Shaoyu Chen"
+date: "2023-10-13"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+library(tidyverse)
+library(ggridges)
+library(ggplot2)
+library(knitr)
+library(patchwork)
+```
+
+##Problem 1
+```{r include=FALSE}
+library(p8105.datasets)
+data("instacart")
+```
