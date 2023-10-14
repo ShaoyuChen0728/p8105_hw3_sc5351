@@ -87,3 +87,17 @@ instacart |>
     values_from = mean_hour) |>
   knitr::kable(digits = 2)
 ```
+
+##Proble 2
+Data cleaning
+```{r}
+data("brfss_smart2010")
+brfss_data =
+  brfss_smart2010|>
+  janitor::clean_names()|>
+  rename("state"="locationabbr" , "location"="locationdesc") |>
+  filter(topic=='Overall Health')|>
+  filter(response %in% c("Excellent","Very good","Good","Fair","Poor"))|>
+  mutate(response = factor(response, levels = c("Poor", "Fair", "Good", "Very Good", "Excellent"), ordered = TRUE))
+brfss_data
+```
