@@ -92,13 +92,13 @@ instacart |>
 Data cleaning
 ```{r}
 data("brfss_smart2010")
-brfss_data =
+brfss_data <-
   brfss_smart2010|>
   janitor::clean_names()|>
   rename("state"="locationabbr" , "location"="locationdesc") |>
   filter(topic=='Overall Health')|>
   filter(response %in% c("Excellent","Very good","Good","Fair","Poor"))|>
-  mutate(response = factor(response, levels = c("Poor", "Fair", "Good", "Very Good", "Excellent"), ordered = TRUE))
+  mutate(response = factor(response, levels = c("Poor", "Fair", "Good", "Very good", "Excellent")))
 brfss_data
 ```
 States were observed at 7 or more locations in 2002.
@@ -148,7 +148,8 @@ spaghetti_data|>
 Finally, make a two-panel plot showing, for the years 2006, and 2010, distribution of data_value for responses (“Poor” to “Excellent”) among locations in NY State.
 ```{r}
 plot_data <- brfss_data |>
-  filter(state == "NY" & year %in% c(2006, 2010) & response %in% c("Poor", "Fair", "Good", "Very Good", "Excellent"))
+  filter(year %in% c("2006", "2010"),state == "NY")|>
+  select(year, state, location, response, data_value)
 plot_data |>
   ggplot(aes(x = response,y = data_value, color=response))+
   geom_boxplot()+
