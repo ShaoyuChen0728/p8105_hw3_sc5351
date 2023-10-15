@@ -243,6 +243,16 @@ Based on this plot, we can see that female with high school and more than high s
 
 Finally, make a three-panel plot that shows the 24-hour activity time courses for each education level and use color to indicate sex.
 ```{r}
-
+whole_data <- merged_data |>
+  pivot_longer(cols = starts_with("min"), names_to = "time", values_to = "activity")
+three_panel_plot <- whole_data |>
+  ggplot(aes(x = time, y = activity, color = sex))+
+  geom_line() +
+  labs(
+     x = "Time of Day", y = "Activity") +
+  geom_smooth(se = FALSE)+
+  facet_wrap(~education, ncol = 1) +
+  theme(legend.position = "right")
+three_panel_plot
 ```
-
+Based on this plot, it shows that during noon and afternoon, women are more active than men. And similar in other time periods.
