@@ -10,6 +10,7 @@ library(tidyverse)
 library(ggridges)
 library(ggplot2)
 library(knitr)
+library(dplyr)
 library(patchwork)
 ```
 
@@ -182,6 +183,7 @@ covar_data =
   )) 
 covar_data
 ```
+
 ```{r}
 accel_data <-
   read_csv("./data/nhanes_accel.csv")|>
@@ -189,6 +191,11 @@ accel_data <-
   drop_na() 
 accel_data
 ```
+
+```{r}
+merged_data <- merge(covar_data, accel_data, by = "seqn")
+```
+
 
 Produce a reader-friendly table for the number of men and women in each education category
 ```{r}
@@ -219,8 +226,7 @@ According to this boxplot, we can find the younger participants trend to have hi
 
 Create a total activity plot
 ```{r}
-merged_data <-
-  merge(covar_data, accel_data, by = "seqn") |>
+summary_data <- merged_data |>
   mutate(total_act = rowSums(across(min1:min1440), na.rm = TRUE)) |>
   ggplot(aes(x = age, y = total_act, color = sex)) +
   geom_point(alpha = 0.5) +
@@ -231,6 +237,12 @@ merged_data <-
     y = "Total Activity"
   ) +
   facet_wrap(~education) 
-merged_data
+summary_data
 ```
 Based on this plot, we can see that female with high school and more than high school education level have more total activities than that of male. However, male with less than high school education level have more total activities than that of female.
+
+Finally, make a three-panel plot that shows the 24-hour activity time courses for each education level and use color to indicate sex.
+```{r}
+
+```
+
